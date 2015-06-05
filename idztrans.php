@@ -4,6 +4,20 @@ if (!defined('_PS_VERSION_'))
 
 class idztrans extends Module
 {	
+	// Retrocompatibility 1.4/1.5
+	private function initContext()
+	{
+	  if (class_exists('Context'))
+	    $this->context = Context::getContext();
+	  else
+	  {
+	    global $smarty, $cookie;
+	    $this->context = new StdClass();
+	    $this->context->smarty = $smarty;
+	    $this->context->cookie = $cookie;
+	  }
+	}
+	
 	public function __construct()
 	{
 		$this->name        = 'idztrans';
@@ -12,6 +26,8 @@ class idztrans extends Module
 		$this->author      = 'iAdvize';
 		$this->displayName = 'iAdvize Transaction';
 		$this->module_key  = '';
+		// Retrocompatibility
+		$this->initContext();
 
 		parent::__construct();
 
